@@ -1,0 +1,5 @@
+test
+test.c
+src/*/test.c
+src/*/test.cpp
+src/*/error.txt
