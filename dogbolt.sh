@@ -9,7 +9,9 @@
 
 # issue: https://github.com/decompiler-explorer/decompiler-explorer/issues/130
 
+# a server timeout takes 60 seconds
 retry_sleep=30
+
 retry_count=10
 
 write_error_txt=true
@@ -206,7 +208,6 @@ for ((retry_step=0; retry_step<retry_count; retry_step++)); do
       if ((${request_count_by_decompiler_key[$decompiler_key]} >= $requests_per_decompiler)); then
         echo "error: timeout from decompiler $decompiler_key"
         # dont retry
-        done_decompiler_keys+=" $decompiler_key"
         continue
       fi
       echo "error: timeout from decompiler $decompiler_key - retrying (done ${request_count_by_decompiler_key[$decompiler_key]} of $requests_per_decompiler requests)"
@@ -214,9 +215,9 @@ for ((retry_step=0; retry_step<retry_count; retry_step++)); do
       # this can return html with "<title>Server Error (500)</title>"
       rerun_response="$(curl -s -X POST https://dogbolt.org/api/binaries/$binary_id/decompilations/$decompilation_id/rerun/)"
       if echo "$rerun_response" | grep -q -F "<title>Server Error (500)</title>"; then
-        echo "error: the rerun API returned server error 500"
+        echo "error: the rerun API of $decompiler_key returned server error 500"
       elif [[ -n "$rerun_response" ]]; then
-        echo "error: the rerun API returned something:"
+        echo "error: the rerun API of $decompiler_key returned something:"
         echo "$rerun_response"
       fi
       continue
