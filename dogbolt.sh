@@ -188,8 +188,8 @@ for ((retry_step=0; retry_step<retry_count; retry_step++)); do
         continue
       fi
       # $error_path exists but has an unknown hash
-      echo -n "moving existing error file to $error_path.bak-$error_hash"
-      mv -v "$error_path" "$error_path.bak-$error_hash"
+      echo "moving existing error file to $error_path.bak-$error_hash"
+      mv "$error_path" "$error_path.bak-$error_hash"
     fi
 
     # TODO keep only one output file
