@@ -84,7 +84,13 @@ fi
 if [ -z "$binary_id" ]; then
   echo uploading binary
   # the "binary id" seems to be a random uuid, not related to the file hashes produced by rhash
-  binary_id="$(curl -s -X POST --form "file=@$file_path" https://dogbolt.org/api/binaries/ | jq -r .id)"
+  upload_response="$(curl -s -X POST --form "file=@$file_path" https://dogbolt.org/api/binaries/)"
+  # echo "upload_response: $upload_response"
+  if ! binary_id="$(jq -r .id <<<"$upload_response")"; then
+    # upload_response can be a non-json string like "Request Entity Too Large"
+    echo "error: failed to decode json from upload_response: $upload_response"
+    exit 1
+  fi
 
   # write cache
   mkdir -p "$(dirname "$binary_id_cache_path")"
