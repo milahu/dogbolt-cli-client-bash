@@ -46,7 +46,7 @@ fi
 echo "binary path: $file_path"
 
 # check binary size: limit is 2 MB
-file_size=$(stat -c%s "$file_path")
+file_size=$(stat -L -c%s "$file_path")
 echo "binary size: $file_size"
 # $ expr 2 \* 1024 \* 1024
 # 2097152
